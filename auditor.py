@@ -13,4 +13,6 @@ while True:
         print(f"Failed Entries Count: {failed_entries}")
         continue 
 
+    else:
+        quantity = int(stock_count) #safe to convert to int
 

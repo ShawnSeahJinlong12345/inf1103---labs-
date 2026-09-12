@@ -22,3 +22,6 @@ while True:
             print(f"Failed Entries Count: {failed_entries}")
             continue
 
+    stock_total += quantity
+    print(f"Number of stocks running: {stock_total} ")
+

@@ -7,5 +7,10 @@ while True:
     if stock_count.lower() == "quit":
         break
 
+    elif not stock_count.isdigit():
+        print("Invalid Command, Type again.")
+        failed_entries += 1
+        print(f"Failed Entries Count: {failed_entries}")
+        continue 
 
 

@@ -29,3 +29,7 @@ while True:
         if quantity >= 500:
             print("Alert: Invetory exceeds 500 units!")
             break
+
+print("-- Report of Total Entries -- ")
+print(f"Total Stocks: {stock_total}")
+print(f"Total Failed Entries: {failed_entries}  ")

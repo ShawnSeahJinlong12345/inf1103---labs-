@@ -28,3 +28,11 @@ def process_delivery(current_total, new_value):
 def calculate_tax(amount):
     """Takes a delivery amount and returns the tax (10% of that delivery)."""
     return amount * 0.10
+
+
+
+def generate_report(total_units, failed_attempts):
+    """Prints the final summary."""
+    print("-- Report of Total Entries --")
+    print(f"Total Deliveries Processed: {total_units}")
+    print(f"Number of Failed/Rejected Entries: {failed_attempts}")

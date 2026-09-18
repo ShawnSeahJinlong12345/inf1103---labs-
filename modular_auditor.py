@@ -18,3 +18,8 @@ def get_valid_input():
                 return None  # signals a failed attempt
 
             return quantity
+
+
+def process_delivery(current_total, new_value):
+    """Calculates the new total and returns it."""
+    return current_total + new_value

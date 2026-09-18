@@ -23,3 +23,8 @@ def get_valid_input():
 def process_delivery(current_total, new_value):
     """Calculates the new total and returns it."""
     return current_total + new_value
+
+
+def calculate_tax(amount):
+    """Takes a delivery amount and returns the tax (10% of that delivery)."""
+    return amount * 0.10

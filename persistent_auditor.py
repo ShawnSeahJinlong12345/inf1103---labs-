@@ -67,6 +67,8 @@ while True:
     result = get_valid_input()
 
     if result == "quit":
+        save_inventory(stock_total, history)
+        print("Inventory saved to inventory.txt")
         break
 
     if result is None:

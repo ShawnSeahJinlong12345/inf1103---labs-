@@ -10,9 +10,13 @@ def load_inventory(filename="inventory.txt"):
             return total, history
     except FileNotFoundError:
         return 0, []
+
+def save_inventory(total, history, filename="inventory.txt"):
+    """Writes the final total and transaction history list to file."""
+    with open(filename, "w") as f:
+        f.write(f"{total}\n")
+        f.write(",".join(str(h) for h in history))
  
-
-
 
 def get_valid_input():
     """Handles the prompt, validates input, returns a valid integer or 'quit' signal."""
@@ -72,6 +76,8 @@ while True:
 
     quantity = result
     stock_total = process_delivery(stock_total, quantity)
+
+    history.append(quantity)
 
     tax = calculate_tax(quantity)
     total_tax += tax

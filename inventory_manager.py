@@ -51,3 +51,11 @@ def add_product(inventory, product_id, name, price, stock):
         "stock": stock,
     })
     return True
+
+def update_stock(inventory, product_id, new_stock):
+    """Updates the stock of an existing product. Returns True if updated."""
+    product = search_product(inventory, product_id)
+    if product is None:
+        return False
+    product["stock"] = new_stock
+    return True

@@ -93,7 +93,7 @@ def read_int(prompt):
             return int(value)
         print("Invalid quantity. Enter a whole number (0 or more).")
 
-        
+
 # ---------------- Menu handlers ----------------
 def handle_add(inventory):
     print("Add New Product")
@@ -109,3 +109,18 @@ def handle_add(inventory):
     stock = read_int("Stock Quantity: ")
     add_product(inventory, product_id, name, price, stock)
     print("Product added successfully!")
+
+
+def handle_update(inventory):
+    print("Update Stock")
+    product_id = input("Enter Product ID: ").strip()
+    product = search_product(inventory, product_id)
+    if product is None:
+        print("Product not found.")
+        return
+    print("Product Found:")
+    print(f"Name: {product['name']}")
+    print(f"Current Stock: {product['stock']}")
+    new_stock = read_int("New Stock Quantity: ")
+    update_stock(inventory, product_id, new_stock)
+    print("Stock updated successfully!")

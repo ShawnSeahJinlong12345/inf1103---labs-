@@ -92,3 +92,20 @@ def read_int(prompt):
         if value.isdigit():
             return int(value)
         print("Invalid quantity. Enter a whole number (0 or more).")
+
+        
+# ---------------- Menu handlers ----------------
+def handle_add(inventory):
+    print("Add New Product")
+    product_id = input("Product ID: ").strip()
+    if not product_id:
+        print("Product ID cannot be empty.")
+        return
+    if search_product(inventory, product_id):
+        print("Product ID already exists. Product not added.")
+        return
+    name = input("Product Name: ").strip()
+    price = read_float("Price: ")
+    stock = read_int("Stock Quantity: ")
+    add_product(inventory, product_id, name, price, stock)
+    print("Product added successfully!")

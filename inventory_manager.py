@@ -124,3 +124,18 @@ def handle_update(inventory):
     new_stock = read_int("New Stock Quantity: ")
     update_stock(inventory, product_id, new_stock)
     print("Stock updated successfully!")
+
+def handle_search(inventory):
+    print("Search Product")
+    product_id = input("Enter Product ID: ").strip()
+    product = search_product(inventory, product_id)
+    if product is None:
+        print("Product not found.")
+        return
+    print("Product Found")
+    print(LINE)
+    print(f"ID: {product['id']}")
+    print(f"Name: {product['name']}")
+    print(f"Price: ${product['price']:.2f}")
+    print(f"Stock: {product['stock']}")
+    print(LINE)

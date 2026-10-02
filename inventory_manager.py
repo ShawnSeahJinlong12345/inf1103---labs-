@@ -59,3 +59,14 @@ def update_stock(inventory, product_id, new_stock):
         return False
     product["stock"] = new_stock
     return True
+
+def display_all(inventory):
+    """Prints every product in the inventory."""
+    print("Current Inventory")
+    print(LINE)
+    if not inventory:
+        print("No products in inventory.")
+    for p in inventory:
+        print(f"ID: {p['id']} | Name: {p['name']} | "
+              f"Price: ${p['price']:.2f} | Stock: {p['stock']}")
+    print(LINE)

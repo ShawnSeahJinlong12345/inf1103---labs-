@@ -29,3 +29,13 @@ def save_inventory(inventory, filename=FILENAME):
         os.makedirs(folder, exist_ok=True)
     with open(filename, "w") as f:
         json.dump(inventory, f, indent=4)
+
+        
+
+# ---------------- Data manipulation ----------------
+def search_product(inventory, product_id):
+    """Returns the product dictionary matching the ID, or None."""
+    for product in inventory:
+        if product["id"].lower() == product_id.lower():
+            return product
+    return None

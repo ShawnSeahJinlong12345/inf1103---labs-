@@ -30,7 +30,7 @@ def save_inventory(inventory, filename=FILENAME):
     with open(filename, "w") as f:
         json.dump(inventory, f, indent=4)
 
-        
+
 
 # ---------------- Data manipulation ----------------
 def search_product(inventory, product_id):
@@ -39,3 +39,15 @@ def search_product(inventory, product_id):
         if product["id"].lower() == product_id.lower():
             return product
     return None
+
+def add_product(inventory, product_id, name, price, stock):
+    """Adds a new product dictionary to the inventory. Returns True if added."""
+    if search_product(inventory, product_id):
+        return False
+    inventory.append({
+        "id": product_id,
+        "name": name,
+        "price": price,
+        "stock": stock,
+    })
+    return True

@@ -83,3 +83,12 @@ def read_float(prompt):
             return value
         except ValueError:
             print("Invalid number. Try again.")
+
+
+def read_int(prompt):
+    """Keeps asking until a non-negative whole number is entered."""
+    while True:
+        value = input(prompt).strip()
+        if value.isdigit():
+            return int(value)
+        print("Invalid quantity. Enter a whole number (0 or more).")

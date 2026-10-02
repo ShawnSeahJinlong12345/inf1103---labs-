@@ -70,3 +70,16 @@ def display_all(inventory):
         print(f"ID: {p['id']} | Name: {p['name']} | "
               f"Price: ${p['price']:.2f} | Stock: {p['stock']}")
     print(LINE)
+
+# ---------------- Input helpers ----------------
+def read_float(prompt):
+    """Keeps asking until a non-negative number is entered."""
+    while True:
+        try:
+            value = float(input(prompt))
+            if value < 0:
+                print("Value cannot be negative. Try again.")
+                continue
+            return value
+        except ValueError:
+            print("Invalid number. Try again.")

@@ -80,3 +80,109 @@ class Inventory:
     
     def get_products(self):
         return self.__products.copy()
+
+#file handling
+def load_inventory(filename = FILENAME):
+    inventory = Inventory()
+    try:
+        with open(filename,"r",encoding = "utf-8") as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        print(f"{filename} not found. Starting with an empty inventory")
+        return inventory
+
+    if not isinstance(data,list):
+        raise ValueError("The inventory file must contain a list of products.")
+
+    for item in data:
+        if not isinstance(item,dict):
+            raise ValueError("Each saved product must be a JSON object")
+        try:
+            product = Product(item["id"],item["name"],
+                              item["price"],item["stock"])
+        except KeyError as error:
+            raise ValueError(f"A saved product is missing {error}.") from error
+        if not inventory.add_product(product):
+            raise ValueError(f"Duplicate product ID: {product.get_product_id()}")
+
+    print("Inventory loaded successfully.")
+    return inventory
+    
+def save_inventory(inventory, filename=FILENAME):
+    data = [
+        {"id": product.get_product_id(), "name": product.get_name(),
+         "price": product.get_price(), "stock": product.get_stock()}
+        for product in inventory.get_products()
+    ]
+    folder = os.path.dirname(filename)
+    if folder:
+        os.makedirs(folder, exist_ok=True)
+    with open(filename, "w", encoding="utf-8") as file:
+        json.dump(data, file, indent=4)
+
+def read_float(prompt):
+    while True:
+        try:
+            value = float(input(prompt))
+            if not math.isfinite(value) or value < 0:
+                print("Enter a finite number of 0 or more.")
+                continue
+            return value
+        except ValueError:
+            print("Invalid number. Try again.")
+
+
+def read_int(prompt):
+    while True:
+        try:
+            value = int(input(prompt).strip())
+            if value >= 0:
+                return value
+        except ValueError:
+            pass
+        print("Invalid quantity. Enter a whole number (0 or more).")
+
+def handle_add(inventory):
+    print("Add New Product")
+    product_id = input("Product ID: ").strip()
+    if not product_id:
+        print("Product ID cannot be empty.")
+        return
+    if inventory.search_product(product_id) is not None:
+        print("Product ID already exists. Product not added.")
+        return
+    name = input("Product Name: ").strip()
+    if not name:
+        print("Product name cannot be empty.")
+        return
+    price = read_float("Price: ")
+    stock = read_int("Stock Quantity: ")
+    product = Product(product_id, name, price, stock)
+    inventory.add_product(product)
+    print("Product added successfully!")
+
+
+def handle_update(inventory):
+    print("Update Stock")
+    product_id = input("Enter Product ID: ").strip()
+    product = inventory.search_product(product_id)
+    if product is None:
+        print("Product not found.")
+        return
+    print(f"Name: {product.get_name()}")
+    print(f"Current Stock: {product.get_stock()}")
+    new_stock = read_int("New Stock Quantity: ")
+    inventory.update_stock(product_id, new_stock)
+    print("Stock updated successfully!")
+
+def handle_search(inventory):
+    print("Search Product")
+    product_id = input("Enter Product ID: ").strip()
+    product = inventory.search_product(product_id)
+    if product is None:
+        print("Product not found.")
+        return
+    print("Product Found")
+    print(LINE)
+    product.display_information()
+    print(LINE)

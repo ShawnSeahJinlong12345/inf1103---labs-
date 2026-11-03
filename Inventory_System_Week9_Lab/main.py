@@ -2,10 +2,15 @@ import json
 import os
 import math
 
-from product import Product
+from product import PhysicalProduct,DigitalProduct
 from inventory import Inventory
 
-FILENAME = os.environ.get("INVENTORY_FILE", "inventory.json")
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+FILENAME = os.environ.get(
+    "INVENTORY_FILE",
+    os.path.join(BASE_DIR, "inventory.json")
+)
+
 LINE = "-" * 48
 
 #file handling
@@ -25,10 +30,30 @@ def load_inventory(filename = FILENAME):
         if not isinstance(item,dict):
             raise ValueError("Each saved product must be a JSON object")
         try:
-            product = Product(item["id"],item["name"],
-                              item["price"],item["stock"])
+            product_type = item["type"]
+
+            if product_type == "physical":
+                product = PhysicalProduct(
+                    item["id"],
+                    item["name"],
+                    item["price"],
+                    item["stock"],
+                    item["weight"],
+                )
+            elif product_type == "digital":
+                product = DigitalProduct(
+                    item["id"],
+                    item["name"],
+                    item["price"],
+                    item["stock"],
+                    item["download_size"],
+                )
+            else:
+                raise ValueError(f"Unknown saved product type: {product_type!r}")
+            
         except KeyError as error:
             raise ValueError(f"A saved product is missing {error}.") from error
+        
         if not inventory.add_product(product):
             raise ValueError(f"Duplicate product ID: {product.get_product_id()}")
 
@@ -36,11 +61,28 @@ def load_inventory(filename = FILENAME):
     return inventory
     
 def save_inventory(inventory, filename=FILENAME):
-    data = [
-        {"id": product.get_product_id(), "name": product.get_name(),
-         "price": product.get_price(), "stock": product.get_stock()}
-        for product in inventory.get_products()
-    ]
+    data = []
+    for product in inventory.get_products():
+        item = {
+            "id": product.get_product_id(),
+            "name": product.get_name(),
+            "price": product.get_price(),
+            "stock": product.get_stock(),
+        }
+
+        if isinstance(product, PhysicalProduct):
+            item["type"] = "physical"
+            item["weight"] = product.get_weight()
+
+        elif isinstance(product, DigitalProduct):
+            item["type"] = "digital"
+            item["download_size"] = product.get_download_size()
+
+        else:
+            raise ValueError(
+                f"Unsupported product type: {type(product).__name__}"
+            )
+        data.append(item)
     folder = os.path.dirname(filename)
     if folder:
         os.makedirs(folder, exist_ok=True)
@@ -69,25 +111,49 @@ def read_int(prompt):
             pass
         print("Invalid quantity. Enter a whole number (0 or more).")
 
+def read_positive_float(prompt):
+    while True:
+        value = read_float(prompt)
+
+        if value > 0:
+            return value
+
+        print("Enter a number greater than 0.")
+
 def handle_add(inventory):
     print("Add New Product")
+    while True:
+        product_type = input("Choose product type (1 = Physical, 2 = Digital): ").strip()
+        if product_type in ("1","2"):
+            break
+        print("Please enter 1 or 2.")
     product_id = input("Product ID: ").strip()
     if not product_id:
         print("Product ID cannot be empty.")
         return
     if inventory.search_product(product_id) is not None:
-        print("Product ID already exists. Product not added.")
+        print("Product ID alreadys exists. Product not added.")
         return
-    name = input("Product Name: ").strip()
+
+    name = input("Product name: ").strip()
     if not name:
         print("Product name cannot be empty.")
         return
+
     price = read_float("Price: ")
     stock = read_int("Stock Quantity: ")
-    product = Product(product_id, name, price, stock)
-    inventory.add_product(product)
-    print("Product added successfully!")
 
+    if product_type == "1":
+        weight = read_positive_float("Weight in kilograms: ")
+        product = PhysicalProduct(product_id,name,price,stock,weight)
+    else: 
+        download_size = read_positive_float("Download size in MB: ")
+        product = DigitalProduct(product_id, name, price, stock, download_size)
+
+    if inventory.add_product(product):
+        print("Product added successfully!")
+    else:
+        print("Product could not be added.")
 
 def handle_update(inventory):
     print("Update Stock")
@@ -130,6 +196,9 @@ def main():
     print("=" * 40)
     print("INVENTORY MANAGEMENT SYSTEM")
     print("=" * 40)
+
+    print("Loading inventory from:", os.path.abspath(FILENAME))
+    
     try:
         inventory = load_inventory()
     except (OSError, ValueError) as error:
@@ -152,7 +221,7 @@ def main():
         elif option in ("5", "6"):
             try:
                 save_inventory(inventory)
-            except OSError as error:
+            except (OSError,ValueError) as error:
                 print(f"Could not save inventory: {error}")
                 continue
             print(f"Inventory saved successfully to {FILENAME}.")

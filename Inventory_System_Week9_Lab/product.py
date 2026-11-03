@@ -2,7 +2,7 @@ import math
 from abc import ABC, abstractmethod
 
 #class product
-class Product:
+class Product(ABC):
     def __init__(self,product_id,name,price,stock_quantity):
         if not isinstance(product_id,str) or not product_id.strip():
             raise ValueError("Product ID cannot be empty.")
@@ -38,15 +38,18 @@ class Product:
     def display_information(self):
         print(f"ID: {self.__product_id} | Name:{self.__name} | "
               f"Price: ${self.__price:.2f} | Stock: {self.__stock}")
+        
+    #child class must implement get_fulfilment_info method
+    @abstractmethod
+    def get_fulfilment_info(self):
+        pass
 
 class CanBeShipped(ABC):
     @abstractmethod
     def calculate_shipping_cost(self):
         pass
 
-
-
-class PhysicalProduct(Product):
+class PhysicalProduct(Product,CanBeShipped):
     def __init__ (self,product_id,name,price,stock_quantity,weight):
         super().__init__(product_id,name,price,stock_quantity)
         #validate weight
@@ -70,15 +73,9 @@ class PhysicalProduct(Product):
     def get_fulfilment_info(self):
         return "This product requires physical shipping."
 
-    def get_fulfilment_info(self):
-        return "This product requires physical shipping."
-
-
     def calculate_shipping_cost(self):
         rate_per_kg = 5.0 
         return self.__weight * rate_per_kg
-
-    
 
 class DigitalProduct(Product):
     def __init__ (self,product_id,name,price,stock_quantity,download_size):
@@ -105,4 +102,4 @@ class DigitalProduct(Product):
         print(f"Download size: {self._download_size} megabytes")
 
     def get_fulfilment_info(self):
-        return "This product is delivered digitally."
+            return "This product is delivered digitally."

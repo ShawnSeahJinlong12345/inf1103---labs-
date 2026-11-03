@@ -38,7 +38,7 @@ class Product:
         print(f"ID: {self.__product_id} | Name:{self.__name} | "
               f"Price: ${self.__price:.2f} | Stock: {self.__stock}")
 
-class PhysicalProduct():
+class PhysicalProduct(Product):
     def __init__ (self,product_id,name,price,stock_quantity,weight):
         super().__init__(product_id,name,price,stock_quantity)
         #validate weight
@@ -65,3 +65,30 @@ class PhysicalProduct():
     def calculate_shipping_cost(self):
         rate_per_kg = 5.0 
         return self.__weight * rate_per_kg
+
+class DigitalProduct(Product):
+    def __init__ (self,product_id,name,price,stock_quantity,download_size):
+        super().__init__(product_id,name,price,stock_quantity)
+
+        #validate downloadsize 
+        if (
+            isinstance(download_size, bool)
+            or not isinstance(download_size, (int, float))
+            or not math.isfinite(download_size)
+            or download_size <= 0
+        ):
+            raise ValueError(
+                "Download size must be a finite number greater than 0."
+            )
+
+        self._download_size = float(download_size)
+
+    def get_download_size(self):
+        return self._download_size
+
+    def display_information(self):
+        super().display_information()
+        print(f"Download size: {self._download_size} megabytes")
+
+    def get_fulfilment_info(self):
+            return "This product is delivered digitally."

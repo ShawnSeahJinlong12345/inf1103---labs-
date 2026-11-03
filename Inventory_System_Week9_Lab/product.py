@@ -102,4 +102,4 @@ class DigitalProduct(Product):
         print(f"Download size: {self._download_size} megabytes")
 
     def get_fulfilment_info(self):
-            return "This product is delivered digitally."
+        return "This product is delivered digitally."

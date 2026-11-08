@@ -84,7 +84,7 @@ class Product(ABC):
         
     #child class must implement get_fulfilment_info method
     @abstractmethod
-    def get_fulfilment_info(self):
+    def get_fulfilment_info(self) -> str:
         pass
 
 class CanBeShipped(ABC):
@@ -158,5 +158,6 @@ class DigitalProduct(Product):
 
     def get_fulfilment_info(self)->str:
         return "This product is delivered digitally."
+
 
 

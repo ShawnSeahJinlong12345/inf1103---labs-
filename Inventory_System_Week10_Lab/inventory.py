@@ -10,7 +10,7 @@ class Inventory:
 
     #methods
     def add_product(self,product: Product) -> bool:
-        if self.search_product(product.get_product_id()) is not None:
+        if self.find_product(product.get_product_id()) is not None:
             return False
         self.__products.append(product)
         return True
@@ -35,7 +35,8 @@ class Inventory:
             print("No products in inventory.")
         for product in self.__products:
             product.display_information()
-
+            print(product.get_fulfilment_info())
+        
         print(LINE)
     
     def get_products(self)->list[Product]:

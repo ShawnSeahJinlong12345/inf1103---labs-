@@ -21,14 +21,14 @@ class Inventory:
                  return product
         return None
 
-    def update_stock(self,product_id: str, new_stock: int) -> bool:
+    def update_stock(self,product_id: str, new_stock: int)->bool:
         product = self.find_product(product_id)
         if product is None:
             return False
         product.update_stock(new_stock)
         return True
 
-    def display_all(self) -> None:
+    def display_all(self)->None:
         print("Current Inventory")
         print(LINE)
         if not self.__products:
@@ -38,10 +38,10 @@ class Inventory:
 
         print(LINE)
     
-    def get_products(self) -> list[Product]:
+    def get_products(self)->list[Product]:
         return self.__products.copy()
 
-    def remove_product(self,product_id: str) -> Bool:
+    def remove_product(self,product_id: str)->bool:
         product = self.find_product(product_id)
         if product is None:
             return False

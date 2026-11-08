@@ -8,7 +8,7 @@ class OrderLine:
         self.quantity: int = quantity
 
     def calculate_subtotal(self)-> float:
-        return self.product_getprice() * self.quantity
+        return self.product.get_price() * self.quantity
 
 class Order:
     def __init__(self,order_id:str)-> None:
@@ -33,7 +33,7 @@ class Supplier:
         self._name: str= name
         self._contact_email: str = contact_email
 
-    def display_information(self):
+    def display_information(self)->None:
         print(f"Supplier id: {self._supplier_id} | "
             f"Name: {self._name}"
             f"Contact email: {self._contact_email}")
@@ -58,27 +58,27 @@ class Product(ABC):
         self.__product_id = product_id.strip()
         self.__name = name.strip()
         self.__price = float(price)
-        self.supplier: Supplier = Supplier
+        self.supplier: Supplier = supplier
         self.update_stock(stock_quantity)
     #methods
-    def get_product_id(self):
+    def get_product_id(self)->str:
         return self.__product_id
 
-    def get_name(self):
+    def get_name(self)->str:
         return self.__name
 
-    def get_price(self):
+    def get_price(self)->float:
         return self.__price
 
-    def get_stock(self):
+    def get_stock(self)->int:
         return self.__stock
 
-    def update_stock(self,quantity):
+    def update_stock(self,quantity)->None:
         if type(quantity) is not int or quantity < 0:
             raise ValueError("Stock must be a whole number of 0 or more")
         self.__stock = quantity
 
-    def display_information(self):
+    def display_information(self)->None:
         print(f"ID: {self.__product_id} | Name:{self.__name} | "
               f"Price: ${self.__price:.2f} | Stock: {self.__stock}")
         
@@ -112,17 +112,17 @@ class PhysicalProduct(Product,CanBeShipped):
     
         self.__weight = float(weight)
 
-    def get_weight(self):
+    def get_weight(self)->float:
         return self.__weight
 
-    def display_information(self):
+    def display_information(self)->None:
         super().display_information()
         print(f"Weight: {self.__weight:.2f} kg")
 
-    def get_fulfilment_info(self):
+    def get_fulfilment_info(self)->str:
         return "This product requires physical shipping."
 
-    def calculate_shipping_cost(self):
+    def calculate_shipping_cost(self)->float:
         rate_per_kg = 5.0 
         return self.__weight * rate_per_kg
 
@@ -149,14 +149,14 @@ class DigitalProduct(Product):
 
         self._download_size = float(download_size)
 
-    def get_download_size(self):
+    def get_download_size(self)->float:
         return self._download_size
 
-    def display_information(self):
+    def display_information(self)->None:
         super().display_information()
         print(f"Download size: {self._download_size} megabytes")
 
-    def get_fulfilment_info(self):
+    def get_fulfilment_info(self)->str:
         return "This product is delivered digitally."
 
 

@@ -30,5 +30,13 @@
         "stock": 10,
         "type": "digital",
         "download_size": 288.0
+    },
+    {
+        "id": "CyberPunk Edgerunners Game", 
+        "name": "P005",
+        "price": 69.9,
+        "stock": 14,
+        "type": "digital",
+        "download_size": 10000.0
     }
 ]

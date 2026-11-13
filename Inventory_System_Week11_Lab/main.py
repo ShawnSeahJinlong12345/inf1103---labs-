@@ -2,8 +2,13 @@ import json
 import os
 import math
 
-from product import Supplier,PhysicalProduct,DigitalProduct
+from supplier import Supplier
+from PhysicalProduct import PhysicalProduct
+from DigitalProduct import DigitalProduct
+from ProductFactory import ProductFactory
+from product_loader import load_products
 from inventory import Inventory
+
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 FILENAME = os.environ.get(
@@ -70,16 +75,12 @@ def load_inventory(filename: str = FILENAME)->Inventory:
                     supplier_data["contact_email"].strip(),
                 )
 
-            if product_type == "physical":
-                product = PhysicalProduct(
-                    item["id"], item["name"], item["price"],
-                    item["stock"], item["weight"], supplier,
-                )
-            else:
-                product = DigitalProduct(
-                    item["id"], item["name"], item["price"],
-                    item["stock"], item["download_size"], supplier,
-                )
+            product = ProductFactory.create(
+                product_type, item["id"], item["name"], item["price"],
+                item["stock"], supplier,
+                weight=item.get("weight"),
+                download_size=item.get("download_size"),
+            )
 
         except KeyError as error:
             raise ValueError(
@@ -153,12 +154,20 @@ def read_int(prompt:str)->int:
             pass
         print("Invalid quantity. Enter a whole number (0 or more).")
 
-def read_positive_float(prompt:str)->float:
+def read_positive_float(prompt: str) -> float:
+    return get_positive_float(prompt)
+
+def get_positive_float(prompt: str) -> float:
     while True:
-        value = read_float(prompt)
-        if value > 0:
+        try:
+            value = float(input(prompt))
+            if not math.isfinite(value) or value <= 0:
+                print("Please enter a number greater than zero.")
+                continue
             return value
-        print("Enter a number greater than 0.")
+        except ValueError:
+            print("Please enter a valid number, e.g. 12.50")
+
 
 def handle_add(inventory:Inventory  )->None:
     print("Add New Product")
@@ -180,7 +189,7 @@ def handle_add(inventory:Inventory  )->None:
         print("Product name cannot be empty.")
         return
 
-    price = read_float("Price: ")
+    price = get_positive_float("Price: ")
     stock = read_int("Stock Quantity: ")
 
     print("Enter the supplier details for this product.")
@@ -188,10 +197,15 @@ def handle_add(inventory:Inventory  )->None:
 
     if product_type == "1":
         weight = read_positive_float("Weight in kilograms: ")
-        product = PhysicalProduct(product_id,name,price,stock,weight,supplier)
+        product = ProductFactory.create(
+            "physical", product_id, name, price, stock, supplier, weight=weight
+        )
     else: 
         download_size = read_positive_float("Download size in MB: ")
-        product = DigitalProduct(product_id, name, price, stock, download_size,supplier)
+        product = ProductFactory.create(
+            "digital", product_id, name, price, stock, supplier,
+            download_size=download_size
+        )
 
     if inventory.add_product(product):
         print("Product added successfully!")
@@ -234,6 +248,7 @@ def print_menu()->None:
     print("4. Search Product")
     print("5. Save Inventory")
     print("6. Exit")
+    print("7. Load Products from CSV")
     print("----------------------------")
 
 
@@ -273,8 +288,14 @@ def main()->None:
             if option == "6":
                 print("Thank you for using Inventory Management System.")
                 break
+        elif option == "7":
+            path = input("CSV file path (Enter for products.csv): ").strip()
+            if not path:
+                path = os.path.join(BASE_DIR, "products.csv")
+            supplier = read_supplier()
+            load_products(path, inventory, supplier)
         else:
-            print("Invalid option. Please enter a number from 1 to 6.")
+            print("Invalid option. Please enter a number from 1 to 7.")
             
 if __name__ == "__main__":
     main()

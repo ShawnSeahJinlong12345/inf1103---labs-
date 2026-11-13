@@ -14,10 +14,11 @@ class Product(ABC):
             raise ValueError("Product ID cannot be empty.")
         if not isinstance(name,str) or not name.strip():
             raise ValueError("Product name cannot be empty.")
-        if (not isinstance(price,(int,float))
+        if (isinstance(price, bool)
+            or not isinstance(price,(int,float))
             or not math.isfinite(price)
-            or price < 0):
-            raise ValueError("Price must be a finite, non-negative number.")
+            or price <= 0):
+            raise ValueError("Price must be a finite number greater than zero.")
     #attributes
         self.__product_id = product_id.strip()
         self.__name = name.strip()
@@ -50,6 +51,11 @@ class Product(ABC):
     @abstractmethod
     def get_fulfilment_info(self) -> str:
         pass
+
+
+
+
+
 
 
 

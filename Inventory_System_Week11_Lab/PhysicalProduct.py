@@ -1,5 +1,5 @@
 from product import Product
-import CanBeShipped
+from CanBeShipped import CanBeShipped
 from supplier import Supplier
 import math
 

@@ -1,0 +1,67 @@
+[
+    {
+        "id": "P001",
+        "name": "Laptop",
+        "price": 25.5,
+        "stock": 15,
+        "supplier": {
+            "supplier_id": "100",
+            "name": "MandyCompany",
+            "contact_email": "MandyCompany@gmail.com"
+        },
+        "type": "physical",
+        "weight": 1.8
+    },
+    {
+        "id": "P002",
+        "name": "Mouse",
+        "price": 25.5,
+        "stock": 15,
+        "supplier": {
+            "supplier_id": "101",
+            "name": "SalesCompany",
+            "contact_email": "SalesCompany@gmail.com"
+        },
+        "type": "physical",
+        "weight": 0.1
+    },
+    {
+        "id": "P003",
+        "name": "Keyboard",
+        "price": 45.0,
+        "stock": 25,
+        "supplier": {
+            "supplier_id": "102",
+            "name": "BeeCompany",
+            "contact_email": "BeeCompany@gmail.com"
+        },
+        "type": "physical",
+        "weight": 0.8
+    },
+    {
+        "id": "P004",
+        "name": "Ebook",
+        "price": 29.9,
+        "stock": 10,
+        "supplier": {
+            "supplier_id": "103",
+            "name": "BookCompany",
+            "contact_email": "BookCompany@gmail.com"
+        },
+        "type": "digital",
+        "download_size": 288.0
+    },
+    {
+        "id": "CyberPunk Edgerunners Game",
+        "name": "P005",
+        "price": 69.9,
+        "stock": 14,
+        "supplier": {
+            "supplier_id": "104",
+            "name": "GameCompany",
+            "contact_email": "GameCompany@gmail.com"
+        },
+        "type": "digital",
+        "download_size": 10000.0
+    }
+]

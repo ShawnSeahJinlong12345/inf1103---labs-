@@ -1,6 +1,6 @@
-id,name,price,stock,supplier_id,supplier_name,contact_email,type,weight,download_size
+product_id,name,price,stock_quantity,supplier_id,supplier_name,contact_email,product_type,weight,download_size
 P001,Laptop,25.5,15,100,MandyCompany,MandyCompany@gmail.com,physical,1.8,
 P002,Mouse,25.5,15,101,SalesCompany,SalesCompany@gmail.com,physical,0.1,
 P003,Keyboard,45.0,25,102,BeeCompany,BeeCompany@gmail.com,physical,0.8,
 P004,Ebook,29.9,10,103,BookCompany,BookCompany@gmail.com,digital,,288.0
-CyberPunk Edgerunners Game,P005,69.9,14,104,GameCompany,GameCompany@gmail.com,digital,,10000.0
+P005,CyberPunk Edgerunners Game,69.9,14,104,GameCompany,GameCompany@gmail.com,digital,,10000.0

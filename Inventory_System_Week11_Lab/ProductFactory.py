@@ -1,3 +1,5 @@
+
+
 from product import Product
 from PhysicalProduct import PhysicalProduct
 from DigitalProduct import DigitalProduct
@@ -13,4 +15,3 @@ stock_quantity: int, supplier: Supplier) -> Product:
             return DigitalProduct(product_id, name, price, stock_quantity, supplier)
         else:
             raise ValueError(f"Unknown product type: {product_type}")
-
